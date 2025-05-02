@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Sons - Instrumentos Brasileiros</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }
+    h1 { color: #2c3e50; }
+    .instrumento {
+      display: inline-block;
+      margin: 20px;
+      padding: 20px;
+      background: #3498db;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo de Sons - Instrumentos Brasileiros</h1>
+  <p>Clique nos botões para ouvir o som dos instrumentos!</p>
+
+  <div class="instrumento" onclick="tocarSom('berimbau')">🎵 Berimbau</div>
+  <div class="instrumento" onclick="tocarSom('zabumba')">🥁 Zabumba</div>
+  <div class="instrumento" onclick="tocarSom('cuica')">🎶 Cuíca</div>
+
+  <audio id="berimbau" src="https://freesound.org/data/previews/415/415060_5121236-lq.mp3"></audio>
+  <audio id="zabumba" src="https://freesound.org/data/previews/435/435612_4337855-lq.mp3"></audio>
+  <audio id="cuica" src="https://freesound.org/data/previews/267/267118_4597794-lq.mp3"></audio>
+
+  <script>
+    function tocarSom(id) {
+      const audio = document.getElementById(id);
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quebra-Cabeça Cultural</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+    h1 { color: #2c3e50; }
+    .puzzle-board {
+      width: 300px;
+      height: 300px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      border: 2px solid #333;
+    }
+    .piece {
+      width: 100px;
+      height: 100px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      background-size: 300px 300px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quebra-Cabeça - Cultura Brasileira</h1>
+  <p>Monte a imagem arrastando as peças para a posição correta.</p>
+  <div class="puzzle-board" id="board"></div>
+
+  <script>
+    const board = document.getElementById("board");
+    const pieces = [];
+    const order = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createPieces() {
+      const shuffled = shuffle([...order]);
+      shuffled.forEach((pos, i) => {
+        const piece = document.createElement("div");
+        piece.classList.add("piece");
+        piece.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/5/5c/Festa_Junina_-_Quadrilha_1.jpg')";
+        const row = Math.floor(pos / 3);
+        const col = pos % 3;
+        piece.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
+        piece.draggable = true;
+        piece.dataset.index = pos;
+        piece.addEventListener("dragstart", dragStart);
+        piece.addEventListener("dragover", e => e.preventDefault());
+        piece.addEventListener("drop", drop);
+        board.appendChild(piece);
+        pieces.push(piece);
+      });
+    }
+
+    let dragged;
+
+    function dragStart(e) {
+      dragged = e.target;
+    }
+
+    function drop(e) {
+      const target = e.target;
+      const draggedIndex = dragged.dataset.index;
+      const targetIndex = target.dataset.index;
+
+      dragged.dataset.index = targetIndex;
+      target.dataset.index = draggedIndex;
+
+      const draggedBg = dragged.style.backgroundPosition;
+      dragged.style.backgroundPosition = target.style.backgroundPosition;
+      target.style.backgroundPosition = draggedBg;
+    }
+
+    createPieces();
+  </script>
+</body>
+</html>
