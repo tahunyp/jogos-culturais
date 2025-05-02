@@ -17,10 +17,10 @@
     .piece {
       width: 100px;
       height: 100px;
-      box-sizing: border-box;
+      display: flex;
       border: 1px solid #ccc;
       background-size: 300px 300px;
-      cursor: pointer;
+      cursor: grab;
     }
   </style>
 </head>
@@ -31,7 +31,6 @@
 
   <script>
     const board = document.getElementById("board");
-    const pieces = [];
     const order = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
     function shuffle(array) {
@@ -44,20 +43,19 @@
 
     function createPieces() {
       const shuffled = shuffle([...order]);
-      shuffled.forEach((pos, i) => {
+      shuffled.forEach((pos) => {
         const piece = document.createElement("div");
         piece.classList.add("piece");
         piece.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/5/5c/Festa_Junina_-_Quadrilha_1.jpg')";
         const row = Math.floor(pos / 3);
         const col = pos % 3;
         piece.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
-        piece.draggable = true;
+        piece.setAttribute("draggable", "true");
         piece.dataset.index = pos;
         piece.addEventListener("dragstart", dragStart);
         piece.addEventListener("dragover", e => e.preventDefault());
         piece.addEventListener("drop", drop);
         board.appendChild(piece);
-        pieces.push(piece);
       });
     }
 
@@ -69,15 +67,11 @@
 
     function drop(e) {
       const target = e.target;
-      const draggedIndex = dragged.dataset.index;
-      const targetIndex = target.dataset.index;
+      if (!target.classList.contains("piece") || dragged === target) return;
 
-      dragged.dataset.index = targetIndex;
-      target.dataset.index = draggedIndex;
-
-      const draggedBg = dragged.style.backgroundPosition;
+      const tempBG = dragged.style.backgroundPosition;
       dragged.style.backgroundPosition = target.style.backgroundPosition;
-      target.style.backgroundPosition = draggedBg;
+      target.style.backgroundPosition = tempBG;
     }
 
     createPieces();
